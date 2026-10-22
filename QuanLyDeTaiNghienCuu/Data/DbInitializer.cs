@@ -196,6 +196,7 @@ namespace QuanLyDeTaiNghienCuu.Data
                 context.DeTais.AddRange(deTais);
                 context.SaveChanges();
             }
+            DuLieuMauModule5.Seed(context);
         }
     }
 }

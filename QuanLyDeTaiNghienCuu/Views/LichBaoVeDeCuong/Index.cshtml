@@ -1,0 +1,121 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.LichIndexViewModel
+@{
+    ViewData["Title"] = "Lịch bảo vệ đề cương";
+}
+
+<h3 class="mb-4"><i class="fa-solid fa-calendar-check me-2"></i>Lịch bảo vệ đề cương</h3>
+
+<!-- Hồ sơ chờ lập lịch -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white fw-semibold">
+        Hồ sơ Đạt xét duyệt đang chờ lập lịch (@Model.HoSoChoLapLich.Count)
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Mã hồ sơ</th>
+                    <th>Sinh viên</th>
+                    <th>Đề tài</th>
+                    <th>Ngày nộp</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var h in Model.HoSoChoLapLich)
+                {
+                    <tr>
+                        <td>@h.MaHoSo</td>
+                        <td>@h.SinhVien?.HoTen</td>
+                        <td>@h.DeTai?.TenDeTai</td>
+                        <td>@h.NgayNop.ToString("dd/MM/yyyy")</td>
+                        <td class="text-end">
+                            <a asp-action="Create" asp-route-maHoSo="@h.MaHoSo" class="btn btn-sm btn-primary">
+                                <i class="fa-solid fa-plus me-1"></i>Lập lịch
+                            </a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.HoSoChoLapLich.Any())
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-3">Không có hồ sơ nào chờ lập lịch.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Danh sách lịch -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span class="fw-semibold">Danh sách lịch bảo vệ (@Model.DanhSachLich.Count)</span>
+        <form method="get" asp-action="Index" class="d-flex gap-2">
+            <select name="trangThai" class="form-select form-select-sm">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.TrangThai))">Tất cả trạng thái</option>
+                <option value="Đã lên lịch" selected="@(Model.TrangThai == "Đã lên lịch")">Đã lên lịch</option>
+                <option value="Đã hoàn thành" selected="@(Model.TrangThai == "Đã hoàn thành")">Đã hoàn thành</option>
+                <option value="Đã hủy" selected="@(Model.TrangThai == "Đã hủy")">Đã hủy</option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-primary">Lọc</button>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Sinh viên</th>
+                    <th>Đề tài</th>
+                    <th>Thời gian</th>
+                    <th>Hình thức</th>
+                    <th>Địa điểm / liên kết</th>
+                    <th>GV phản biện</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var l in Model.DanhSachLich)
+                {
+                    var badge = l.TrangThai switch
+                    {
+                        "Đã lên lịch" => "bg-primary",
+                        "Đã hoàn thành" => "bg-success",
+                        _ => "bg-secondary"
+                    };
+                    <tr>
+                        <td>@l.HoSo?.SinhVien?.HoTen</td>
+                        <td>@l.HoSo?.DeTai?.TenDeTai</td>
+                        <td>
+                            @l.ThoiGianBatDau.ToString("dd/MM/yyyy")<br />
+                            <small class="text-muted">@l.ThoiGianBatDau.ToString("HH:mm") - @l.ThoiGianKetThuc.ToString("HH:mm")</small>
+                        </td>
+                        <td>@l.HinhThucBaoVe</td>
+                        <td>@l.DiaDiemHoacLienKet</td>
+                        <td>@l.GiangVienPhanBien</td>
+                        <td><span class="badge @badge">@l.TrangThai</span></td>
+                        <td class="text-end text-nowrap">
+                            @if (l.TrangThai == "Đã lên lịch")
+                            {
+                                <a asp-action="Edit" asp-route-id="@l.MaLichBaoVeDeCuong" class="btn btn-sm btn-outline-primary">Điều chỉnh</a>
+
+                                <form asp-action="HoanThanh" asp-route-id="@l.MaLichBaoVeDeCuong" method="post" class="d-inline"
+                                      onsubmit="return confirm('Xác nhận lịch bảo vệ này đã hoàn thành?');">
+                                    <button type="submit" class="btn btn-sm btn-success">Hoàn thành</button>
+                                </form>
+
+                                <form asp-action="Huy" asp-route-id="@l.MaLichBaoVeDeCuong" method="post" class="d-inline"
+                                      onsubmit="return confirm('Bạn có chắc muốn hủy lịch bảo vệ này?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Hủy lịch</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (!Model.DanhSachLich.Any())
+                {
+                    <tr><td colspan="8" class="text-center text-muted py-3">Chưa có lịch bảo vệ nào.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

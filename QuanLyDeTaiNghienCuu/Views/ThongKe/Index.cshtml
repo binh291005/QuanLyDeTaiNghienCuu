@@ -1,0 +1,69 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.ThongKeViewModel
+@{
+    ViewData["Title"] = "Thống kê";
+}
+
+<h3 class="mb-4"><i class="fa-solid fa-chart-column me-2"></i>Thống kê</h3>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="Index" class="row g-2 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Loại thống kê</label>
+                <select name="loai" class="form-select">
+                    @foreach (var l in QuanLyDeTaiNghienCuu.Models.ViewModels.ThongKeViewModel.DanhSachLoai)
+                    {
+                        <option value="@l.Ma" selected="@(l.Ma == Model.Loai)">@l.Ten</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Năm (cho thống kê theo tháng)</label>
+                <input type="number" name="nam" value="@Model.Nam" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Xem thống kê</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ThongBao))
+{
+    <div class="alert alert-info">@Model.ThongBao</div>
+}
+
+@if (Model.Dong.Any())
+{
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+            <div class="fw-semibold">@Model.TieuDe</div>
+            <div class="text-muted small">@Model.YNghia</div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:60px">#</th>
+                        <th>@Model.CotNhan</th>
+                        <th>@Model.CotGiaTri</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int stt = 0; }
+                    @foreach (var d in Model.Dong)
+                    {
+                        stt++;
+                        <tr>
+                            <td>@stt</td>
+                            <td>@d.Nhan</td>
+                            <td class="fw-semibold">@d.GiaTri.ToString("0.##") @d.DonVi</td>
+                            <td class="text-muted">@d.GhiChu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

@@ -1,0 +1,22 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.LichFormViewModel
+@{
+    ViewData["Title"] = "Điều chỉnh lịch bảo vệ";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-semibold">
+                <i class="fa-solid fa-pen-to-square me-2"></i>Điều chỉnh lịch bảo vệ đề cương
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" asp-route-id="@Model.MaLichBaoVeDeCuong" method="post">
+                    <partial name="_LichForm" model="Model" />
+
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

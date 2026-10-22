@@ -1,0 +1,60 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.KetQuaFormViewModel
+@{
+    ViewData["Title"] = "Nhập kết quả giao đề tài";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-semibold">
+                <i class="fa-solid fa-award me-2"></i>Nhập kết quả giao đề tài
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="MaHoSo" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Sinh viên</label>
+                        <input class="form-control" value="@Model.TenSinhVien" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Đề tài</label>
+                        <input class="form-control" value="@Model.TenDeTai" readonly />
+                        <div class="form-text">
+                            Đã giao: <strong>@Model.SoDaGiao</strong> / @Model.SoNhomToiDa nhóm tối đa
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DiemDanhGia" class="form-label fw-semibold"></label>
+                        <input asp-for="DiemDanhGia" type="number" step="any" class="form-control" />
+                        <span asp-validation-for="DiemDanhGia" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NhanXet" class="form-label fw-semibold"></label>
+                        <textarea asp-for="NhanXet" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="NhanXet" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold d-block">Kết quả</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="KetQua" value="Được giao đề tài" id="kqGiao" />
+                            <label class="form-check-label" for="kqGiao">Được giao đề tài</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="KetQua" value="Không được giao đề tài" id="kqKhongGiao" />
+                            <label class="form-check-label" for="kqKhongGiao">Không được giao đề tài</label>
+                        </div>
+                        <div><span asp-validation-for="KetQua" class="text-danger"></span></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
