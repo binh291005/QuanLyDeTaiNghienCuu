@@ -1,0 +1,31 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.PagerModel
+@{
+    // Giữ nguyên các tham số tìm kiếm/lọc hiện tại, chỉ đổi "page"
+    string LinkFor(int p)
+    {
+        var dict = Context.Request.Query
+            .Where(q => !string.Equals(q.Key, "page", StringComparison.OrdinalIgnoreCase))
+            .ToDictionary(q => q.Key, q => q.Value.ToString());
+        dict["page"] = p.ToString();
+        return Url.Action(null, dict) ?? "#";
+    }
+}
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Phân trang" class="mt-4">
+        <ul class="pagination pagination-custom justify-content-center mb-0">
+            <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+                <a class="page-link" href="@LinkFor(Model.Page - 1)"><i class="fa-solid fa-chevron-left"></i></a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Page ? "active" : "")">
+                    <a class="page-link" href="@LinkFor(i)">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" href="@LinkFor(Model.Page + 1)"><i class="fa-solid fa-chevron-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+}

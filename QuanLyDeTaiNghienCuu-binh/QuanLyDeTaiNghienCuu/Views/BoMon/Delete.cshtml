@@ -1,0 +1,40 @@
+@model QuanLyDeTaiNghienCuu.Models.BoMon
+@{
+    ViewData["Title"] = "Xóa bộ môn";
+    var blocked = Model.DeTais.Any();
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="filter-card">
+            <h4 class="fw-bold mb-3 text-danger"><i class="fa-solid fa-trash me-2"></i>Xóa bộ môn</h4>
+
+            @if (blocked)
+            {
+                <div class="alert alert-warning">
+                    <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                    Bộ môn <strong>@Model.TenBoMon</strong> đang có <strong>@Model.DeTais.Count</strong> đề tài liên quan nên
+                    <strong>không thể xóa</strong>. Bạn có thể chuyển bộ môn sang trạng thái "Tạm dừng".
+                </div>
+            }
+            else
+            {
+                <p>Bạn có chắc chắn muốn xóa bộ môn <strong>@Model.TenBoMon</strong>? Thao tác này không thể hoàn tác.</p>
+            }
+
+            <dl class="row">
+                <dt class="col-sm-4">Email liên hệ</dt><dd class="col-sm-8">@(Model.EmailLienHe ?? "—")</dd>
+                <dt class="col-sm-4">Trạng thái</dt><dd class="col-sm-8">@(Model.TrangThai ? "Hoạt động" : "Tạm dừng")</dd>
+            </dl>
+
+            <form asp-action="Delete" asp-route-id="@Model.MaBoMon" method="post" class="d-flex gap-2">
+                <input type="hidden" asp-for="MaBoMon" />
+                @if (!blocked)
+                {
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash me-1"></i>Xác nhận xóa</button>
+                }
+                <a asp-action="Index" class="btn btn-outline-custom">Quay lại</a>
+            </form>
+        </div>
+    </div>
+</div>

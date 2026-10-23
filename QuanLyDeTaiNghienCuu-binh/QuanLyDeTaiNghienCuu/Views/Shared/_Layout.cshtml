@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hệ Thống Quản Lý Đề Tài NCKH & Đăng Ký Đề Tài Sinh Viên</title>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand navbar-brand-logo" asp-area="" asp-controller="DeTai" asp-action="Index">
+                    <i class="fa-solid fa-graduation-cap"></i> UNETI NCKH
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                        aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" asp-controller="DeTai" asp-action="Index">
+                                <i class="fa-solid fa-book-bookmark me-1"></i> Đề tài
+                            </a>
+                        </li>
+                        @if (Context.Session.IsAdmin())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom" asp-controller="TaiKhoan" asp-action="Index">
+                                    <i class="fa-solid fa-users-gear me-1"></i> Tài khoản
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom" asp-controller="BoMon" asp-action="Index">
+                                    <i class="fa-solid fa-building-columns me-1"></i> Bộ môn
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-2">
+                        @if (Context.Session.IsLoggedIn())
+                        {
+                            if (Context.Session.IsAdmin() || Context.Session.IsGiangVien())
+                            {
+                                <a asp-controller="DeTai" asp-action="Create" class="btn btn-primary-custom">
+                                    <i class="fa-solid fa-plus me-1"></i> Tạo Đề Tài Mới
+                                </a>
+                            }
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                <i class="fa-solid fa-user-shield me-1"></i>
+                                @Context.Session.GetHoTen() &middot; @Roles.ToDisplay(Context.Session.GetVaiTro())
+                            </span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-custom">
+                                    <i class="fa-solid fa-right-from-bracket me-1"></i> Đăng xuất
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-custom">
+                                <i class="fa-solid fa-user-plus me-1"></i> Đăng ký
+                            </a>
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary-custom">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid px-4 py-4">
+        <!-- Toast Notification Alerts -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4 rounded-3" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-circle-check fs-4 me-3 text-success"></i>
+                    <div>
+                        <strong>Thành công!</strong> @TempData["SuccessMessage"]
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4 rounded-3" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-triangle-exclamation fs-4 me-3 text-danger"></i>
+                    <div>
+                        <strong>Lỗi nghiệp vụ!</strong> @TempData["ErrorMessage"]
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <main role="main" class="pb-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-white border-top py-4 text-center text-muted text-small mt-auto">
+        <div class="container">
+            <p class="mb-1 fw-semibold text-secondary">
+                <i class="fa-solid fa-shield-halved me-1"></i> Bài Tập Lớn Thực Hành Lập Trình .NET - Đề Tài 31 - ASP.NET Core 10 MVC
+            </p>
+            <p class="mb-0 text-muted" style="font-size: 0.85rem;">
+                Nhóm 5 &copy; 2026 UNETI. Tất cả các quyền được bảo lưu.
+            </p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

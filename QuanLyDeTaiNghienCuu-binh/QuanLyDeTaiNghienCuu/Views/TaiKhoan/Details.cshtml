@@ -1,0 +1,31 @@
+@using QuanLyDeTaiNghienCuu.Helpers
+@model QuanLyDeTaiNghienCuu.Models.TaiKhoan
+@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="filter-card">
+            <h4 class="fw-bold mb-3"><i class="fa-solid fa-user me-2 text-primary"></i>@Model.TenDangNhap</h4>
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Họ và tên</dt><dd class="col-sm-8">@Model.HoTen</dd>
+                <dt class="col-sm-4">Email</dt><dd class="col-sm-8">@Model.Email</dd>
+                <dt class="col-sm-4">Vai trò</dt><dd class="col-sm-8">@Roles.ToDisplay(Model.VaiTro)</dd>
+                <dt class="col-sm-4">Trạng thái</dt>
+                <dd class="col-sm-8">
+                    @if (Model.TrangThai) { <span class="badge bg-success-subtle text-success">Hoạt động</span> }
+                    else { <span class="badge bg-danger-subtle text-danger">Bị khóa</span> }
+                </dd>
+                @if (Model.SinhVien != null)
+                {
+                    <dt class="col-sm-4">Hồ sơ sinh viên</dt><dd class="col-sm-8">@Model.SinhVien.HoTen</dd>
+                }
+            </dl>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.MaTaiKhoan" class="btn btn-primary-custom"><i class="fa-solid fa-pen me-1"></i>Sửa</a>
+            <a asp-action="Index" class="btn btn-outline-custom">Quay lại danh sách</a>
+        </div>
+    </div>
+</div>

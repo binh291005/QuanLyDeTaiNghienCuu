@@ -1,0 +1,84 @@
+@model QuanLyDeTaiNghienCuu.Models.DeTai
+
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Đề Tài - " + Model.TenDeTai;
+    bool hasApplications = ViewBag.HasApplications ?? false;
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="text-decoration-none text-muted fw-semibold">
+        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách đề tài
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden border-top border-4 border-danger">
+            <div class="card-header bg-white p-4 border-bottom">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-triangle-exclamation fs-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-danger mb-1">Xác Nhận Xóa Đề Tài Nghiên Cứu</h3>
+                        <p class="text-muted mb-0">Bạn có chắc chắn muốn xóa vĩnh viễn đề tài này khỏi hệ thống?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                @if (hasApplications)
+                {
+                    <div class="alert alert-warning border-0 shadow-sm mb-4 rounded-3">
+                        <div class="d-flex align-items-start">
+                            <i class="fa-solid fa-shield-halved fs-4 me-3 text-warning"></i>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">CẢNH BÁO KIỂM SOÁT DỮ LIỆU LỊCH SỬ</h6>
+                                <p class="mb-0 small text-secondary">
+                                    Đề tài này hiện đã có <strong>@Model.HoSoDangKyDeTais.Count hồ sơ đăng ký</strong> trong hệ thống. Quy định nghiệp vụ không cho phép xóa cứng các đề tài có lịch sử đăng ký để tránh mất dữ liệu liên quan. Vui lòng cân nhắc chuyển trạng thái đề tài sang <strong>"Tạm dừng"</strong> hoặc <strong>"Đã đóng"</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="p-4 bg-light rounded-3 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">@Model.TenDeTai</h5>
+                    <dl class="row mb-0 small">
+                        <dt class="col-sm-4 text-muted">Bộ môn quản lý:</dt>
+                        <dd class="col-sm-8 fw-semibold">@(Model.BoMon?.TenBoMon ?? "N/A")</dd>
+
+                        <dt class="col-sm-4 text-muted">Lĩnh vực nghiên cứu:</dt>
+                        <dd class="col-sm-8">@Model.LinhVucNghienCuu</dd>
+
+                        <dt class="col-sm-4 text-muted">Số nhóm tối đa:</dt>
+                        <dd class="col-sm-8">@Model.SoNhomToiDa nhóm</dd>
+
+                        <dt class="col-sm-4 text-muted">Trạng thái hiện tại:</dt>
+                        <dd class="col-sm-8"><span class="badge bg-secondary">@Model.TrangThai</span></dd>
+                    </dl>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="MaDeTai" />
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-4">Hủy thao tác</a>
+                        @if (hasApplications)
+                        {
+                            <button type="submit" class="btn btn-danger px-4" disabled title="Không thể xóa do có lịch sử hồ sơ">
+                                <i class="fa-solid fa-ban me-1"></i> Không Thể Xóa
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger px-4">
+                                <i class="fa-solid fa-trash me-1"></i> Xác Nhận Xóa Vĩnh Viễn
+                            </button>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

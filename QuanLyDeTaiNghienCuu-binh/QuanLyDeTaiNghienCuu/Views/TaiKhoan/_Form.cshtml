@@ -1,0 +1,53 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.TaiKhoanFormViewModel
+@{
+    var roleList = (List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewBag.RoleList;
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        <label asp-for="TenDangNhap" class="form-label-custom"></label>
+        <input asp-for="TenDangNhap" class="form-control form-control-custom" autocomplete="off" />
+        <span asp-validation-for="TenDangNhap" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="HoTen" class="form-label-custom"></label>
+        <input asp-for="HoTen" class="form-control form-control-custom" />
+        <span asp-validation-for="HoTen" class="text-danger small"></span>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        <label asp-for="MatKhau" class="form-label-custom"></label>
+        <input asp-for="MatKhau" class="form-control form-control-custom" autocomplete="new-password" />
+        @if (Model.IsEdit)
+        {
+            <div class="form-text">Để trống nếu không muốn đổi mật khẩu.</div>
+        }
+        <span asp-validation-for="MatKhau" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="XacNhanMatKhau" class="form-label-custom"></label>
+        <input asp-for="XacNhanMatKhau" class="form-control form-control-custom" autocomplete="new-password" />
+        <span asp-validation-for="XacNhanMatKhau" class="text-danger small"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Email" class="form-label-custom"></label>
+    <input asp-for="Email" type="email" class="form-control form-control-custom" />
+    <span asp-validation-for="Email" class="text-danger small"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="VaiTro" class="form-label-custom"></label>
+    <select asp-for="VaiTro" asp-items="roleList" class="form-select form-select-custom"></select>
+    <span asp-validation-for="VaiTro" class="text-danger small"></span>
+</div>
+
+<div class="form-check form-switch mb-4">
+    <input asp-for="TrangThai" class="form-check-input" />
+    <label asp-for="TrangThai" class="form-check-label">Hoạt động (bỏ chọn = khóa tài khoản)</label>
+</div>

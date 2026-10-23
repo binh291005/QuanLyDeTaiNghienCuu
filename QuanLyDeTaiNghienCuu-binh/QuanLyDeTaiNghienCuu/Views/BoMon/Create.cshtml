@@ -1,0 +1,24 @@
+@model QuanLyDeTaiNghienCuu.Models.BoMon
+@{
+    ViewData["Title"] = "Thêm bộ môn";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="filter-card">
+            <h4 class="fw-bold mb-4"><i class="fa-solid fa-circle-plus me-2 text-primary"></i>Thêm bộ môn</h4>
+            <form asp-action="Create" method="post">
+                
+                <partial name="_Form" model="Model" />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-floppy-disk me-1"></i>Lưu</button>
+                    <a asp-action="Index" class="btn btn-outline-custom">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

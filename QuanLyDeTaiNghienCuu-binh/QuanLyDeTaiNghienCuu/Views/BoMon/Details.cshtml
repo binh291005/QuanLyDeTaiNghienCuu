@@ -1,0 +1,53 @@
+@model QuanLyDeTaiNghienCuu.Models.BoMon
+@{
+    ViewData["Title"] = "Chi tiết bộ môn";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="filter-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h4 class="fw-bold mb-0"><i class="fa-solid fa-building-columns me-2 text-primary"></i>@Model.TenBoMon</h4>
+                @if (Model.TrangThai)
+                {
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">Hoạt động</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Tạm dừng</span>
+                }
+            </div>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Email liên hệ</dt>
+                <dd class="col-sm-9">@(Model.EmailLienHe ?? "—")</dd>
+                <dt class="col-sm-3">Mô tả</dt>
+                <dd class="col-sm-9" style="white-space:pre-line">@(string.IsNullOrWhiteSpace(Model.MoTa) ? "—" : Model.MoTa)</dd>
+            </dl>
+        </div>
+
+        <div class="filter-card">
+            <h6 class="fw-bold mb-3">Đề tài thuộc bộ môn (@Model.DeTais.Count)</h6>
+            @if (!Model.DeTais.Any())
+            {
+                <p class="text-muted mb-0">Bộ môn chưa có đề tài nào.</p>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var d in Model.DeTais.OrderBy(d => d.TenDeTai))
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <a asp-controller="DeTai" asp-action="Details" asp-route-id="@d.MaDeTai" class="text-decoration-none">@d.TenDeTai</a>
+                            <span class="badge bg-light text-secondary border">@d.TrangThai</span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.MaBoMon" class="btn btn-primary-custom"><i class="fa-solid fa-pen me-1"></i>Sửa</a>
+            <a asp-action="Index" class="btn btn-outline-custom">Quay lại danh sách</a>
+        </div>
+    </div>
+</div>

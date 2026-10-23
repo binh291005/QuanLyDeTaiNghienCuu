@@ -1,0 +1,26 @@
+@model QuanLyDeTaiNghienCuu.Models.BoMon
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="mb-3">
+    <label asp-for="TenBoMon" class="form-label-custom"></label>
+    <input asp-for="TenBoMon" class="form-control form-control-custom" />
+    <span asp-validation-for="TenBoMon" class="text-danger small"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="EmailLienHe" class="form-label-custom"></label>
+    <input asp-for="EmailLienHe" type="email" class="form-control form-control-custom" placeholder="vd: bomon@uneti.edu.vn" />
+    <span asp-validation-for="EmailLienHe" class="text-danger small"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="MoTa" class="form-label-custom"></label>
+    <textarea asp-for="MoTa" rows="4" class="form-control form-control-custom"></textarea>
+    <span asp-validation-for="MoTa" class="text-danger small"></span>
+</div>
+
+<div class="form-check form-switch mb-4">
+    <input asp-for="TrangThai" class="form-check-input" />
+    <label asp-for="TrangThai" class="form-check-label">Hoạt động</label>
+</div>
