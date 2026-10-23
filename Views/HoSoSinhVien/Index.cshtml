@@ -1,0 +1,18 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor HoSoSinhVien/Index.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.HoSoIndexViewModel
+@using QuanLyDeTaiNghienCuu.Services
+@{ViewData["Title"]="Hồ sơ đã nộp";}
+<h1 class="h3">Hồ sơ đăng ký của tôi</h1><form method="get" class="d-flex gap-2 my-3"><select name="status" class="form-select" aria-label="Trạng thái hồ sơ"><option value="">Tất cả trạng thái</option>
+@foreach(var status in Module3Rules.AllStatuses){<option value="@status" selected="@(status==Model.Status)">@status</option>}</select><button class="btn btn-primary">Lọc</button></form>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Mã</th><th>Đề tài / Bộ môn</th><th>Ngày nộp</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+@foreach(var h in Model.Items){<tr><td>@h.MaHoSo</td><td>@h.DeTai?.TenDeTai<br/><small>@h.DeTai?.BoMon?.TenBoMon</small></td><td>@h.NgayNop.ToString("dd/MM/yyyy HH:mm")</td><td>@h.TrangThai</td><td><a asp-action="Details" asp-route-id="@h.MaHoSo">Xem hồ sơ</a></td></tr>}
+</tbody></table></div>@if(!Model.Items.Any()){<p>Chưa có hồ sơ phù hợp. <a asp-controller="DeTai" asp-action="Index">Xem đề tài</a></p>}
+<nav aria-label="Phân trang"><span>Trang @Model.Page / @Model.TotalPages</span>
+@if(Model.Page>1){<a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.Page-1)" asp-route-status="@Model.Status">Trước</a>}
+@if(Model.Page<Model.TotalPages){<a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.Page+1)" asp-route-status="@Model.Status">Sau</a>}</nav>
