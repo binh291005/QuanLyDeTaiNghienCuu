@@ -1,0 +1,199 @@
+@model QuanLyDeTaiNghienCuu.Models.DeTai
+
+@{
+    ViewData["Title"] = "Chi Tiết Đề Tài - " + Model.TenDeTai;
+    int assignedCount = ViewBag.AssignedCount ?? 0;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    int remainingSlots = Model.SoNhomToiDa - assignedCount;
+    if (remainingSlots < 0) remainingSlots = 0;
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="text-decoration-none text-muted fw-semibold">
+        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách đề tài
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Main Content Column -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+            <div class="card-header bg-white p-4 border-bottom">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+                    <span class="badge badge-custom badge-department fs-6">
+                        <i class="fa-solid fa-building-columns me-1"></i> @(Model.BoMon?.TenBoMon ?? "N/A")
+                    </span>
+
+                    @{
+                        string statusBadgeClass = Model.TrangThai switch
+                        {
+                            "Đang mở đăng ký" => "badge-status-dang-mo",
+                            "Chưa mở" => "badge-status-chua-mo",
+                            "Tạm dừng" => "badge-status-tam-dung",
+                            "Đã đóng" => "badge-status-da-dong",
+                            _ => "badge-status-chua-mo"
+                        };
+                    }
+                    <span class="badge badge-custom @statusBadgeClass fs-6">
+                        <i class="fa-solid fa-circle text-xs"></i> Trạng thái: @Model.TrangThai
+                    </span>
+                </div>
+
+                <h2 class="fw-bold text-dark mb-3">@Model.TenDeTai</h2>
+
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="badge badge-custom badge-field fs-6">
+                        <i class="fa-solid fa-microscope me-1"></i> Lĩnh vực: @Model.LinhVucNghienCuu
+                    </span>
+                    <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-star text-warning me-1"></i> ĐTB Tối thiểu: <strong>@Model.DiemTrungBinhToiThieu.ToString("0.0") / 4.0</strong>
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Registration Eligibility Banner for Students -->
+                <div class="p-3 mb-4 rounded-3 border @(Model.IsActiveRegistration ? "bg-success-subtle border-success-subtle" : "bg-warning-subtle border-warning-subtle")">
+                    <div class="d-flex align-items-center">
+                        @if (Model.IsActiveRegistration)
+                        {
+                            <i class="fa-solid fa-circle-check fs-3 text-success me-3"></i>
+                            <div>
+                                <h6 class="fw-bold text-success mb-1">ĐỦ ĐIỀU KIỆN ĐĂNG KÝ HỒ SƠ</h6>
+                                <p class="mb-0 small text-success-emphasis">
+                                    Đề tài đang mở nhận đăng ký từ <strong>@Model.NgayBatDauDangKy.ToString("dd/MM/yyyy")</strong> đến <strong>@Model.HanDangKy.ToString("dd/MM/yyyy")</strong>. Sinh viên có ĐTB &ge; @Model.DiemTrungBinhToiThieu có thể nộp hồ sơ.
+                                </p>
+                            </div>
+                        }
+                        else if (Model.IsExpired)
+                        {
+                            <i class="fa-solid fa-calendar-xmark fs-3 text-danger me-3"></i>
+                            <div>
+                                <h6 class="fw-bold text-danger mb-1">ĐÃ HẾT HẠN ĐĂNG KÝ</h6>
+                                <p class="mb-0 small text-danger-emphasis">
+                                    Thời gian đăng ký đã kết thúc vào ngày <strong>@Model.HanDangKy.ToString("dd/MM/yyyy")</strong>. Hệ thống hiện không nhận thêm hồ sơ mới.
+                                </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-triangle-exclamation fs-3 text-warning me-3"></i>
+                            <div>
+                                <h6 class="fw-bold text-warning-emphasis mb-1">CHƯA THỂ NỘP HỒ SƠ</h6>
+                                <p class="mb-0 small text-warning-emphasis">
+                                    Trạng thái hiện tại: <strong>@Model.TrangThai</strong>. Thời gian nhận đăng ký: @Model.NgayBatDauDangKy.ToString("dd/MM/yyyy") - @Model.HanDangKy.ToString("dd/MM/yyyy").
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="mb-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                        <i class="fa-solid fa-align-left me-2"></i>Mô Tả Chi Tiết Đề Tài
+                    </h5>
+                    <div class="p-3 bg-light rounded-3 text-secondary lh-lg" style="white-space: pre-line;">
+                        @(string.IsNullOrWhiteSpace(Model.MoTaDeTai) ? "Chưa có mô tả chi tiết." : Model.MoTaDeTai)
+                    </div>
+                </div>
+
+                <!-- Student Requirements Section -->
+                <div class="mb-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                        <i class="fa-solid fa-list-check me-2"></i>Yêu Cầu Đối Với Sinh Viên
+                    </h5>
+                    <div class="p-3 bg-light rounded-3 text-secondary lh-lg" style="white-space: pre-line;">
+                        @(string.IsNullOrWhiteSpace(Model.YeuCauSinhVien) ? "Chưa có thông tin yêu cầu cụ thể." : Model.YeuCauSinhVien)
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white p-4 border-top d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-4">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Trở về
+                </a>
+                <div class="d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.MaDeTai" class="btn btn-primary-custom px-4">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh Sửa Đề Tài
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.MaDeTai" class="btn btn-outline-danger rounded-3 px-4">
+                        <i class="fa-solid fa-trash me-1"></i> Xóa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Stats Column -->
+    <div class="col-lg-4">
+        <!-- Key Metrics Card -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-header bg-white p-4 border-bottom">
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="fa-solid fa-chart-pie me-2 text-primary"></i>Thông Số Đăng Ký
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between p-3 mb-3 bg-light rounded-3">
+                    <div>
+                        <span class="text-muted d-block small">Số nhóm tối đa</span>
+                        <span class="fs-4 fw-bold text-dark">@Model.SoNhomToiDa nhóm</span>
+                    </div>
+                    <i class="fa-solid fa-users fs-2 text-primary opacity-50"></i>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between p-3 mb-3 bg-light rounded-3">
+                    <div>
+                        <span class="text-muted d-block small">Hồ sơ đã được giao</span>
+                        <span class="fs-4 fw-bold text-success">@assignedCount nhóm</span>
+                    </div>
+                    <i class="fa-solid fa-circle-check fs-2 text-success opacity-50"></i>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between p-3 mb-3 bg-light rounded-3">
+                    <div>
+                        <span class="text-muted d-block small">Số chỉ tiêu còn lại</span>
+                        <span class="fs-4 fw-bold @(remainingSlots > 0 ? "text-primary" : "text-danger")">@remainingSlots nhóm</span>
+                    </div>
+                    <i class="fa-solid fa-user-plus fs-2 text-info opacity-50"></i>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                    <div>
+                        <span class="text-muted d-block small">Tổng số hồ sơ nộp</span>
+                        <span class="fs-4 fw-bold text-dark">@totalCount hồ sơ</span>
+                    </div>
+                    <i class="fa-solid fa-file-lines fs-2 text-secondary opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Info Card -->
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white p-4 border-bottom">
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="fa-regular fa-calendar-days me-2 text-primary"></i>Thời Gian Nhận Hồ Sơ
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="fa-solid fa-circle-play text-primary mt-1 me-3"></i>
+                        <div>
+                            <strong class="d-block text-dark">Ngày bắt đầu đăng ký:</strong>
+                            <span class="text-muted">@Model.NgayBatDauDangKy.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start">
+                        <i class="fa-solid fa-flag-checkered text-danger mt-1 me-3"></i>
+                        <div>
+                            <strong class="d-block text-dark">Hạn chót đăng ký:</strong>
+                            <span class="text-muted">@Model.HanDangKy.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
