@@ -196,7 +196,67 @@ namespace QuanLyDeTaiNghienCuu.Data
                 context.DeTais.AddRange(deTais);
                 context.SaveChanges();
             }
+quan
+
+            // Seed hồ sơ đăng ký mẫu cho Module 4 nếu chưa có dữ liệu.
+            if (!context.HoSoDangKyDeTais.Any())
+            {
+                var sinhVien = context.SinhViens.FirstOrDefault();
+                var deTaiMau = context.DeTais.OrderBy(d => d.MaDeTai).Take(4).ToList();
+
+                if (sinhVien != null && deTaiMau.Count > 0)
+                {
+                    var hoSos = new List<HoSoDangKyDeTai>();
+
+                    hoSos.Add(new HoSoDangKyDeTai
+                    {
+                        MaSinhVien = sinhVien.MaSinhVien,
+                        MaDeTai = deTaiMau[0].MaDeTai,
+                        NgayNop = DateTime.Now.AddDays(-2),
+                        DeCuongSoBo = "Đề xuất xây dựng hệ thống quản lý đề tài theo kiến trúc ASP.NET Core MVC, sử dụng EF Core và SQL Server.",
+                        GhiChu = "Mong muốn được tham gia phát triển chức năng quản lý hồ sơ và quy trình xét duyệt.",
+                        TrangThai = TrangThaiHoSo.ChoDuyet
+                    });
+
+                    if (deTaiMau.Count > 1)
+                    {
+                        hoSos.Add(new HoSoDangKyDeTai
+                        {
+                            MaSinhVien = sinhVien.MaSinhVien,
+                            MaDeTai = deTaiMau[1].MaDeTai,
+                            NgayNop = DateTime.Now.AddDays(-7),
+                            DeCuongSoBo = "Khảo sát phương pháp nhận dạng khuôn mặt và xây dựng mô hình thử nghiệm.",
+                            GhiChu = "Đã có kiến thức Python cơ bản.",
+                            TrangThai = TrangThaiHoSo.DatXetDuyet,
+                            NgayXuLy = DateTime.Now.AddDays(-5),
+                            NhanXetXetDuyet = "Hồ sơ đáp ứng điều kiện cơ bản, cho phép chuyển sang bước lập lịch bảo vệ đề cương."
+                        });
+                    }
+
+                    if (deTaiMau.Count > 2)
+                    {
+                        hoSos.Add(new HoSoDangKyDeTai
+                        {
+                            MaSinhVien = sinhVien.MaSinhVien,
+                            MaDeTai = deTaiMau[2].MaDeTai,
+                            NgayNop = DateTime.Now.AddDays(-12),
+                            DeCuongSoBo = "Tìm hiểu mô hình IoT và giao thức MQTT để giám sát chất lượng không khí.",
+                            TrangThai = TrangThaiHoSo.KhongDatXetDuyet,
+                            NgayXuLy = DateTime.Now.AddDays(-10),
+                            NhanXetXetDuyet = "Chưa đáp ứng yêu cầu kỹ thuật của đề tài ở thời điểm xét duyệt."
+                        });
+                    }
+
+                    context.HoSoDangKyDeTais.AddRange(hoSos);
+                    context.SaveChanges();
+                }
+            }
+
+        }
+    }
+}
             DuLieuMauModule5.Seed(context);
         }
     }
 }
+main

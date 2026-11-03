@@ -1,4 +1,8 @@
 .vs/
+quan
+bin/
+obj/
+=======
 hai
 bin/
 obj/
@@ -8,4 +12,5 @@ obj/
 [Oo]bj/
 *.user
 *.suo
+main
 main

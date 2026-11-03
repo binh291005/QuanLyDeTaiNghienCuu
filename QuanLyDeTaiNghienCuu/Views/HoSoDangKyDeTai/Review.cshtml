@@ -1,0 +1,90 @@
+@*
+Họ và tên: [ĐIỀN HỌ TÊN]
+Mã sinh viên: [ĐIỀN MÃ SINH VIÊN]
+Nội dung thực hiện: Module 4 - Tiếp nhận, xét duyệt và quản lý trạng thái hồ sơ đăng ký đề tài.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.HoSoXetDuyetViewModel
+@{
+    ViewData["Title"] = "Xét duyệt hồ sơ";
+}
+
+<div class="mb-4">
+    <a asp-action="Details" asp-route-id="@Model.MaHoSo" class="text-decoration-none text-muted"><i class="fa-solid fa-arrow-left me-1"></i>Quay lại chi tiết</a>
+    <h2 class="fw-bold mt-2 mb-1">Xét duyệt hồ sơ #@Model.MaHoSo</h2>
+    <p class="text-muted mb-0">Đối chiếu thông tin sinh viên với yêu cầu đề tài trước khi đưa ra quyết định.</p>
+</div>
+
+@if (Model.DaDatSoNhomToiDa)
+{
+    <div class="alert alert-warning border-0 shadow-sm rounded-3">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+        Đề tài hiện đã đạt số nhóm tối đa (<strong>@Model.SoNhomDaDuocGiao/@Model.SoNhomToiDa</strong>). Đây là cảnh báo nghiệp vụ; hệ thống không tự loại hoặc xóa hồ sơ này.
+    </div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Thông tin đối chiếu</h5>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <tbody>
+                            <tr><th style="width: 32%">Sinh viên</th><td>@Model.HoTenSinhVien</td></tr>
+                            <tr><th>Trạng thái sinh viên</th><td>@(Model.SinhVienDangHoatDong ? "Đang hoạt động" : "Không hoạt động")</td></tr>
+                            <tr><th>Đề tài</th><td>@Model.TenDeTai</td></tr>
+                            <tr><th>Bộ môn</th><td>@Model.TenBoMon</td></tr>
+                            <tr><th>Lĩnh vực quan tâm</th><td>@Model.LinhVucQuanTam</td></tr>
+                            <tr><th>Lĩnh vực nghiên cứu</th><td>@Model.LinhVucNghienCuu</td></tr>
+                            <tr><th>Điểm trung bình</th><td><strong>@(Model.DiemTrungBinh?.ToString("0.00") ?? "-")</strong> / yêu cầu tối thiểu <strong>@Model.DiemTrungBinhToiThieu.ToString("0.00")</strong></td></tr>
+                            <tr><th>Số nhóm đã giao</th><td>@Model.SoNhomDaDuocGiao / @Model.SoNhomToiDa</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box mb-3"><strong>Yêu cầu của đề tài</strong><div class="mt-2" style="white-space: pre-line">@Model.YeuCauSinhVien</div></div>
+                <div class="info-box mb-3"><strong>Đề cương sơ bộ</strong><div class="mt-2" style="white-space: pre-line">@Model.DeCuongSoBo</div></div>
+                <div class="info-box"><strong>Ghi chú</strong><div class="mt-2" style="white-space: pre-line">@Model.GhiChu</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 sticky-lg-top" style="top: 90px;">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-gavel text-primary me-2"></i>Kết quả xét duyệt</h5>
+                <div class="alert alert-light border small">
+                    Hệ thống chỉ hỗ trợ kiểm tra điều kiện. Quyết định Đạt/Không đạt do giảng viên phụ trách xác nhận.
+                </div>
+                <form asp-action="Review" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MaHoSo" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="KetQuaXetDuyet" class="form-label form-label-custom"></label>
+                        <select asp-for="KetQuaXetDuyet" class="form-select form-select-custom">
+                            <option value="">-- Chọn kết quả --</option>
+                            <option value="Đạt xét duyệt">Đạt xét duyệt</option>
+                            <option value="Không đạt xét duyệt">Không đạt xét duyệt</option>
+                        </select>
+                        <span asp-validation-for="KetQuaXetDuyet" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="NhanXetXetDuyet" class="form-label form-label-custom"></label>
+                        <textarea asp-for="NhanXetXetDuyet" class="form-control form-control-custom" rows="7" placeholder="Nhập nhận xét và căn cứ xét duyệt..."></textarea>
+                        <span asp-validation-for="NhanXetXetDuyet" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100" onclick="return confirm('Xác nhận lưu kết quả xét duyệt? Sau khi xử lý, hồ sơ không còn ở trạng thái Chờ duyệt.');">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>Lưu kết quả xét duyệt
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

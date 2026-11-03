@@ -1,0 +1,162 @@
+@*
+Họ và tên: [ĐIỀN HỌ TÊN]
+Mã sinh viên: [ĐIỀN MÃ SINH VIÊN]
+Nội dung thực hiện: Module 4 - Tiếp nhận, xét duyệt và quản lý trạng thái hồ sơ đăng ký đề tài.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.HoSoDangKyIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý hồ sơ đăng ký";
+}
+
+<div class="hero-section mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="hero-title mb-1"><i class="fa-solid fa-folder-open me-2"></i>Module 4 - Quản lý hồ sơ đăng ký</h1>
+            <p class="hero-subtitle mb-0">Tiếp nhận, tra cứu, xét duyệt và quản lý trạng thái hồ sơ đăng ký đề tài.</p>
+        </div>
+        <span class="badge bg-light text-primary border px-3 py-2 rounded-pill">
+            Tổng hồ sơ: <strong>@Model.TotalItems</strong>
+        </span>
+    </div>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger shadow-sm border-0 rounded-3">
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}
+
+<div class="filter-card">
+    <form asp-action="Index" method="get">
+        <div class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label form-label-custom">Họ tên sinh viên</label>
+                <input name="tenSinhVien" value="@Model.TenSinhVien" class="form-control form-control-custom" placeholder="Nhập tên sinh viên..." />
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label form-label-custom">Tên đề tài</label>
+                <input name="tenDeTai" value="@Model.TenDeTai" class="form-control form-control-custom" placeholder="Nhập tên đề tài..." />
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label form-label-custom">Bộ môn</label>
+                <select name="maBoMon" asp-items="Model.BoMonList" class="form-select form-select-custom">
+                    <option value="">Tất cả bộ môn</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label form-label-custom">Trạng thái hồ sơ</label>
+                <select name="trangThai" asp-items="Model.TrangThaiList" class="form-select form-select-custom">
+                    <option value="">Tất cả trạng thái</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label form-label-custom">Từ ngày</label>
+                <input name="tuNgay" type="date" value="@(Model.TuNgay?.ToString("yyyy-MM-dd"))" class="form-control form-control-custom" />
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label form-label-custom">Đến ngày</label>
+                <input name="denNgay" type="date" value="@(Model.DenNgay?.ToString("yyyy-MM-dd"))" class="form-control form-control-custom" />
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <label class="form-label form-label-custom">Sắp xếp</label>
+                <select name="sortBy" asp-items="Model.SortByList" class="form-select form-select-custom"></select>
+            </div>
+            <div class="col-lg-5 d-flex align-items-end gap-2">
+                <button class="btn btn-primary-custom" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i>Tìm / lọc</button>
+                <a asp-action="Index" class="btn btn-outline-custom"><i class="fa-solid fa-rotate-left me-1"></i>Xóa lọc</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-4">Mã HS</th>
+                    <th>Sinh viên</th>
+                    <th>Đề tài / Bộ môn</th>
+                    <th>Ngày nộp</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end pe-4">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="fa-regular fa-folder-open fs-1 d-block mb-3"></i>
+                        Không tìm thấy hồ sơ phù hợp.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.Items)
+                {
+                    var badgeClass = item.TrangThai switch
+                    {
+                        "Chờ duyệt" => "bg-warning-subtle text-warning-emphasis",
+                        "Đạt xét duyệt" => "bg-success-subtle text-success-emphasis",
+                        "Không đạt xét duyệt" => "bg-danger-subtle text-danger-emphasis",
+                        "Đã hủy" => "bg-secondary-subtle text-secondary-emphasis",
+                        "Được giao đề tài" => "bg-primary-subtle text-primary-emphasis",
+                        _ => "bg-info-subtle text-info-emphasis"
+                    };
+                    <tr>
+                        <td class="ps-4 fw-semibold">#@item.MaHoSo</td>
+                        <td>
+                            <div class="fw-semibold">@(item.SinhVien?.HoTen ?? "Không xác định")</div>
+                            <small class="text-muted">ĐTB: @(item.SinhVien?.DiemTrungBinh?.ToString("0.00") ?? "-")</small>
+                        </td>
+                        <td style="min-width: 320px;">
+                            <div class="fw-semibold text-dark">@(item.DeTai?.TenDeTai ?? "Không xác định")</div>
+                            <small class="text-muted"><i class="fa-solid fa-building-columns me-1"></i>@(item.DeTai?.BoMon?.TenBoMon ?? "-")</small>
+                        </td>
+                        <td>@item.NgayNop.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td><span class="badge @badgeClass px-3 py-2 rounded-pill">@item.TrangThai</span></td>
+                        <td class="text-end pe-4 text-nowrap">
+                            <a asp-action="Details" asp-route-id="@item.MaHoSo" class="btn btn-sm btn-outline-secondary">
+                                <i class="fa-regular fa-eye"></i> Chi tiết
+                            </a>
+                            @if (item.TrangThai == QuanLyDeTaiNghienCuu.Models.TrangThaiHoSo.ChoDuyet)
+                            {
+                                <a asp-action="Review" asp-route-id="@item.MaHoSo" class="btn btn-sm btn-primary ms-1">
+                                    <i class="fa-solid fa-check-double"></i> Xét duyệt
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4" aria-label="Phân trang hồ sơ">
+        <ul class="pagination pagination-custom justify-content-center">
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-tenSinhVien="@Model.TenSinhVien"
+                       asp-route-tenDeTai="@Model.TenDeTai"
+                       asp-route-maBoMon="@Model.MaBoMon"
+                       asp-route-trangThai="@Model.TrangThai"
+                       asp-route-tuNgay="@(Model.TuNgay?.ToString("yyyy-MM-dd"))"
+                       asp-route-denNgay="@(Model.DenNgay?.ToString("yyyy-MM-dd"))"
+                       asp-route-sortBy="@Model.SortBy">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
