@@ -196,7 +196,6 @@ namespace QuanLyDeTaiNghienCuu.Data
                 context.DeTais.AddRange(deTais);
                 context.SaveChanges();
             }
-quan
 
             // Seed hồ sơ đăng ký mẫu cho Module 4 nếu chưa có dữ liệu.
             if (!context.HoSoDangKyDeTais.Any())
@@ -249,14 +248,10 @@ quan
 
                     context.HoSoDangKyDeTais.AddRange(hoSos);
                     context.SaveChanges();
+
+                    DuLieuMauModule5.Seed(context);
                 }
             }
-
         }
     }
 }
-            DuLieuMauModule5.Seed(context);
-        }
-    }
-}
-main

@@ -1,6 +1,4 @@
-// Họ và tên: [ĐIỀN HỌ TÊN]
-// Mã sinh viên: [ĐIỀN MÃ SINH VIÊN]
-// Nội dung thực hiện: Module 4 - Tiếp nhận, xét duyệt và quản lý trạng thái hồ sơ đăng ký đề tài.
+
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,8 +22,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         {
             var vaiTro = HttpContext.Session.GetString("VaiTro");
 
-            // Tương thích tạm thời với branch hiện tại chưa có Module 1 đăng nhập/Session.
-            // Khi Module 1 đã tích hợp, Session sẽ có VaiTro và SinhVien sẽ bị chặn tại Controller.
+        //check phân quyền vai trò
             if (string.IsNullOrWhiteSpace(vaiTro))
             {
                 return true;
@@ -45,7 +42,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
             return null;
         }
 
-        // MODULE 4 - Danh sách hồ sơ cần xử lý, tìm kiếm, lọc, sắp xếp, phân trang.
+        // Danh sách hồ sơ cần xử lý, tìm kiếm, lọc, sắp xếp, phân trang.
         public async Task<IActionResult> Index(
             string? tenSinhVien,
             string? tenDeTai,
@@ -161,7 +158,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
             return View(model);
         }
 
-        // MODULE 4 - Xem chi tiết hồ sơ.
+        //Xem chi tiết hồ sơ.
         public async Task<IActionResult> Details(int id)
         {
             var forbidden = KiemTraQuyen();
@@ -191,7 +188,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
             return View(hoSo);
         }
 
-        // MODULE 4 - Hiển thị màn hình xét duyệt.
+        // Hiển thị màn hình xét duyệt.
         [HttpGet]
         public async Task<IActionResult> Review(int id)
         {
@@ -220,7 +217,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
             return View(model);
         }
 
-        // MODULE 4 - Duyệt / từ chối hồ sơ.
+        // Duyệt/từ chối hồ sơ.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Review(HoSoXetDuyetViewModel model)
@@ -245,7 +242,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
                 ModelState.AddModelError(nameof(model.KetQuaXetDuyet), "Kết quả xét duyệt không hợp lệ.");
             }
 
-            // 8.3 - Kiểm tra điều kiện trước khi duyệt.
+            //Kiểm tra điều kiện trước khi duyệt.
             if (hoSo.TrangThai == TrangThaiHoSo.DaHuy)
             {
                 ModelState.AddModelError(string.Empty, "Hồ sơ đã hủy, không thể xét duyệt.");

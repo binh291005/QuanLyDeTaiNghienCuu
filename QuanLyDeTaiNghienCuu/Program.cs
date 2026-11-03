@@ -18,7 +18,6 @@ namespace QuanLyDeTaiNghienCuu
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-quan
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
@@ -26,7 +25,6 @@ quan
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-main
 
             var app = builder.Build();
 
@@ -55,13 +53,8 @@ main
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
-quan
             app.UseSession();
-
-main
             app.UseAuthorization();
-
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
