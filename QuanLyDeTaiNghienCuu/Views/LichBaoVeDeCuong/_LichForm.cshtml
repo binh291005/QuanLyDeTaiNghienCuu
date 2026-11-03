@@ -1,0 +1,66 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.LichFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<input type="hidden" asp-for="MaLichBaoVeDeCuong" />
+<input type="hidden" asp-for="MaHoSo" />
+
+<div class="mb-3">
+    <label class="form-label fw-semibold">Sinh viên</label>
+    <input class="form-control" value="@Model.TenSinhVien" readonly />
+</div>
+<div class="mb-3">
+    <label class="form-label fw-semibold">Đề tài</label>
+    <input class="form-control" value="@Model.TenDeTai" readonly />
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="ThoiGianBatDau" class="form-label fw-semibold"></label>
+        <input asp-for="ThoiGianBatDau" type="datetime-local" class="form-control" />
+        <span asp-validation-for="ThoiGianBatDau" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="ThoiGianKetThuc" class="form-label fw-semibold"></label>
+        <input asp-for="ThoiGianKetThuc" type="datetime-local" class="form-control" />
+        <span asp-validation-for="ThoiGianKetThuc" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="DiaDiemHoacLienKet" class="form-label fw-semibold"></label>
+    <select asp-for="DiaDiemHoacLienKet" class="form-select">
+        <option value="">-- Chọn phòng bảo vệ --</option>
+        <optgroup label="Phòng học (bảo vệ trực tiếp)">
+            @foreach (var p in QuanLyDeTaiNghienCuu.Helpers.DanhMucBaoVe.PhongHoc)
+            {
+                <option value="@p">@p</option>
+            }
+        </optgroup>
+        <optgroup label="Phòng họp trực tuyến (Google Meet)">
+            @foreach (var m in QuanLyDeTaiNghienCuu.Helpers.DanhMucBaoVe.PhongOnline)
+            {
+                <option value="@m.Gia">@m.Ten</option>
+            }
+        </optgroup>
+    </select>
+    <span asp-validation-for="DiaDiemHoacLienKet" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="GiangVienPhanBien" class="form-label fw-semibold"></label>
+    <select asp-for="GiangVienPhanBien" class="form-select">
+        <option value="">-- Chọn giảng viên phản biện --</option>
+        @foreach (var gv in QuanLyDeTaiNghienCuu.Helpers.DanhMucBaoVe.GiangViens)
+        {
+            <option value="@gv">@gv</option>
+        }
+    </select>
+    <span asp-validation-for="GiangVienPhanBien" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="GhiChu" class="form-label fw-semibold"></label>
+    <textarea asp-for="GhiChu" class="form-control" rows="3"></textarea>
+    <span asp-validation-for="GhiChu" class="text-danger"></span>
+</div>
