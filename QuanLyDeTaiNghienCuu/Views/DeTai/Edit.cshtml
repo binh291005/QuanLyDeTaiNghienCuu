@@ -1,0 +1,135 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.DeTaiFormViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Đề Tài - " + Model.TenDeTai;
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="text-decoration-none text-muted fw-semibold">
+        <i class="fa-solid fa-arrow-left me-1"></i> Trở về danh sách đề tài
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-white p-4 border-bottom">
+                <h3 class="fw-bold text-dark mb-1">
+                    <i class="fa-solid fa-pen-to-square text-primary me-2"></i>Chỉnh Sửa Đề Tài Nghiên Cứu
+                </h3>
+                <p class="text-muted mb-0">
+                    Cập nhật các thông số và thuộc tính nghiệp vụ của đề tài [Mã #@Model.MaDeTai].
+                </p>
+            </div>
+
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="MaDeTai" />
+
+                <div class="card-body p-4">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 mb-4" role="alert"></div>
+
+                    <!-- Row 1: TenDeTai -->
+                    <div class="mb-4">
+                        <label asp-for="TenDeTai" class="form-label-custom">
+                            Tên Đề Tài <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="TenDeTai" class="form-control form-control-custom" />
+                        <span asp-validation-for="TenDeTai" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Row 2: MaBoMon & LinhVucNghienCuu -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="MaBoMon" class="form-label-custom">
+                                Bộ Môn Quản Lý <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="MaBoMon" asp-items="Model.BoMonList" class="form-select form-select-custom"></select>
+                            <span asp-validation-for="MaBoMon" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="LinhVucNghienCuu" class="form-label-custom">
+                                Lĩnh Vực Nghiên Cứu <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="LinhVucNghienCuu" class="form-control form-control-custom" />
+                            <span asp-validation-for="LinhVucNghienCuu" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: SoNhomToiDa, DiemTrungBinhToiThieu, TrangThai -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label asp-for="SoNhomToiDa" class="form-label-custom">
+                                Số Nhóm Tối Đa <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="SoNhomToiDa" type="number" min="1" max="100" class="form-control form-control-custom" />
+                            <span asp-validation-for="SoNhomToiDa" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="DiemTrungBinhToiThieu" class="form-label-custom">
+                                ĐTB Tối Thằng (0.0 - 4.0) <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="DiemTrungBinhToiThieu" type="number" step="0.1" min="0" max="4" class="form-control form-control-custom" />
+                            <span asp-validation-for="DiemTrungBinhToiThieu" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="TrangThai" class="form-label-custom">
+                                Trạng Thái Đề Tài <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="TrangThai" asp-items="Model.TrangThaiList" class="form-select form-select-custom"></select>
+                            <span asp-validation-for="TrangThai" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: NgayBatDauDangKy & HanDangKy -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="NgayBatDauDangKy" class="form-label-custom">
+                                Ngày Bắt Đầu Nhận Đăng Ký <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="NgayBatDauDangKy" type="date" class="form-control form-control-custom"
+                                   value="@Model.NgayBatDauDangKy.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="NgayBatDauDangKy" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="HanDangKy" class="form-label-custom">
+                                Hạn Chót Đăng Ký <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="HanDangKy" type="date" class="form-control form-control-custom"
+                                   value="@Model.HanDangKy.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="HanDangKy" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Textarea MoTaDeTai -->
+                    <div class="mb-4">
+                        <label asp-for="MoTaDeTai" class="form-label-custom">Mô Tả Chi Tiết Đề Tài</label>
+                        <textarea asp-for="MoTaDeTai" rows="4" class="form-control form-control-custom"></textarea>
+                        <span asp-validation-for="MoTaDeTai" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Row 6: Textarea YeuCauSinhVien -->
+                    <div class="mb-4">
+                        <label asp-for="YeuCauSinhVien" class="form-label-custom">Yêu Cầu Đối Với Sinh Viên</label>
+                        <textarea asp-for="YeuCauSinhVien" rows="3" class="form-control form-control-custom"></textarea>
+                        <span asp-validation-for="YeuCauSinhVien" class="text-danger small mt-1 d-block"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white p-4 border-top d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-4">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-primary-custom px-4">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Cập Nhật Thay Đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
