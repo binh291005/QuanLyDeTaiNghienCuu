@@ -1,4 +1,11 @@
 .vs/
+hai
 bin/
 obj/
 *.user
+=======
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+main
