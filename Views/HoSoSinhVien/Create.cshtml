@@ -1,0 +1,18 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor HoSoSinhVien/Create.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.NopHoSoViewModel
+@{ViewData["Title"]="Nộp hồ sơ đăng ký";}
+<h1 class="h3">Nộp hồ sơ đăng ký đề tài</h1>
+<p class="lead">@(Model.DeTai?.TenDeTai ?? "Đề tài không tồn tại")</p><p>Bộ môn: @Model.DeTai?.BoMon?.TenBoMon · Hạn đăng ký: @Model.DeTai?.HanDangKy.ToString("dd/MM/yyyy")</p>
+<p>Hãy kiểm tra <a asp-controller="HoSoCaNhan" asp-action="Index">hồ sơ cá nhân</a> trước khi nộp.</p>
+<form method="post" asp-action="Create"><input asp-for="MaDeTai" type="hidden"/><div asp-validation-summary="All" class="text-danger"></div>
+<div class="mb-3"><label asp-for="DeCuongSoBo" class="form-label"></label><textarea asp-for="DeCuongSoBo" rows="9" class="form-control" placeholder="Mục tiêu, phạm vi, phương pháp và kết quả dự kiến"></textarea><span asp-validation-for="DeCuongSoBo" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="GhiChu" class="form-label"></label><textarea asp-for="GhiChu" rows="3" class="form-control"></textarea><span asp-validation-for="GhiChu" class="text-danger"></span></div>
+<p class="text-muted">Ngày nộp và trạng thái Chờ duyệt được hệ thống ghi nhận.</p>
+<button class="btn btn-primary">Nộp hồ sơ</button> <a class="btn btn-outline-secondary" asp-controller="DeTai" asp-action="Details" asp-route-id="@Model.MaDeTai">Quay lại đề tài</a></form>
+@section Scripts {<partial name="_ValidationScriptsPartial"/>}

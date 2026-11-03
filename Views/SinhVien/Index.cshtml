@@ -1,0 +1,20 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor SinhVien/Index.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.SinhVienIndexViewModel
+@{ViewData["Title"]="Quản lý sinh viên";}
+<h1 class="h3">Quản lý sinh viên</h1>
+<div class="d-flex justify-content-between my-3"><form method="get" class="d-flex gap-2"><input name="q" value="@Model.Q" class="form-control" placeholder="Tìm theo họ tên hoặc email" aria-label="Từ khóa"/><button class="btn btn-primary">Tìm kiếm</button></form>
+@if(Context.Session.IsAdmin()){<a class="btn btn-success" asp-action="Create">Thêm sinh viên</a>}</div>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Mã SV</th><th>Họ tên</th><th>Ngành</th><th>Email</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>
+@foreach(var s in Model.Items){<tr><td>@s.MaSinhVien</td><td>@s.HoTen</td><td>@s.Nganh</td><td>@s.Email</td><td>@(s.TrangThai?"Hoạt động":"Ngừng hoạt động")</td><td><a asp-action="Details" asp-route-id="@s.MaSinhVien">Chi tiết</a>
+@if(Context.Session.IsAdmin()){<span> · </span><a asp-action="Edit" asp-route-id="@s.MaSinhVien">Sửa</a><span> · </span><a asp-action="Delete" asp-route-id="@s.MaSinhVien">Xóa</a>}</td></tr>}
+</tbody></table></div>
+@if(!Model.Items.Any()){<p>Không tìm thấy sinh viên phù hợp.</p>}
+<nav aria-label="Phân trang"><span>Trang @Model.Page / @Model.TotalPages</span>
+@if(Model.Page>1){<a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.Page-1)" asp-route-q="@Model.Q">Trước</a>}
+@if(Model.Page<Model.TotalPages){<a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.Page+1)" asp-route-q="@Model.Q">Sau</a>}</nav>

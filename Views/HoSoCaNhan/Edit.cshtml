@@ -1,0 +1,13 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor HoSoCaNhan/Edit.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.SinhVienFormViewModel
+@{ViewData["Title"]="Cập nhật hồ sơ cá nhân";}
+<div class="card border-0 shadow-sm"><div class="card-body p-4"><h1 class="h3">Cập nhật hồ sơ cá nhân</h1>
+<form method="post" asp-action="Edit"><partial name="_SinhVienFields" model="Model"/>
+<div class="mt-4"><button class="btn btn-primary">Lưu thông tin</button> <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a></div></form></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial"/> }

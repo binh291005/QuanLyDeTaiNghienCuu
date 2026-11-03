@@ -1,0 +1,13 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor SinhVien/Details.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model SinhVien
+@{ViewData["Title"]="Chi tiết sinh viên";}
+<h1 class="h3">Chi tiết sinh viên</h1><partial name="_SinhVienDetails" model="Model"/>
+<p>Tài khoản liên kết: @(Model.TaiKhoan?.TenDangNhap ?? "Chưa có")</p>
+@if(Context.Session.IsAdmin()){<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.MaSinhVien">Sửa thông tin</a>}
+<a class="btn btn-outline-secondary" asp-action="Index">Danh sách sinh viên</a>
