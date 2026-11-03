@@ -18,6 +18,7 @@ namespace QuanLyDeTaiNghienCuu
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+quan
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
@@ -25,6 +26,7 @@ namespace QuanLyDeTaiNghienCuu
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+main
 
             var app = builder.Build();
 
@@ -54,7 +56,10 @@ namespace QuanLyDeTaiNghienCuu
             app.UseHttpsRedirection();
             app.UseRouting();
 
+quan
             app.UseSession();
+
+main
             app.UseAuthorization();
 
             app.MapStaticAssets();

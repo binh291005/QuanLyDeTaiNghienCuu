@@ -1,0 +1,14 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor HoSoCaNhan/Index.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model SinhVien
+@{ViewData["Title"]="Hồ sơ cá nhân";}
+<div class="card shadow-sm border-0"><div class="card-body p-4"><h1 class="h3">Hồ sơ cá nhân</h1>
+<p class="text-muted">Thông tin của bạn được sử dụng khi đăng ký đề tài nghiên cứu khoa học.</p>
+<partial name="_SinhVienDetails" model="Model"/>
+<a class="btn btn-primary" asp-action="Edit">Cập nhật thông tin</a>
+<a class="btn btn-outline-secondary" asp-controller="HoSoSinhVien" asp-action="Index">Hồ sơ đã nộp</a></div></div>

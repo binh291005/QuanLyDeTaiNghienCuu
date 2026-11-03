@@ -1,0 +1,98 @@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.KetQuaIndexViewModel
+@{
+    ViewData["Title"] = "Kết quả giao đề tài";
+}
+
+<h3 class="mb-4"><i class="fa-solid fa-award me-2"></i>Kết quả giao đề tài</h3>
+
+<!-- Cảnh báo đề tài đủ số nhóm -->
+@foreach (var d in Model.DeTaiDayNhom)
+{
+    <div class="alert alert-warning d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            Đề tài <strong>@d.TenDeTai</strong> đã giao đủ @d.SoDaGiao/@d.SoNhomToiDa nhóm.
+        </div>
+        <form asp-action="DongDeTai" method="post" class="d-inline"
+              onsubmit="return confirm('Đóng đề tài này? Các hồ sơ còn lại vẫn được giữ nguyên.');">
+            <input type="hidden" name="maDeTai" value="@d.MaDeTai" />
+            <button type="submit" class="btn btn-sm btn-warning">Đóng đề tài</button>
+        </form>
+    </div>
+}
+
+<!-- Hồ sơ chờ nhập kết quả -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white fw-semibold">
+        Hồ sơ Đã bảo vệ đề cương đang chờ nhập kết quả (@Model.HoSoChoNhapKetQua.Count)
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Mã hồ sơ</th>
+                    <th>Sinh viên</th>
+                    <th>Đề tài</th>
+                    <th>Ngày nộp</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var h in Model.HoSoChoNhapKetQua)
+                {
+                    <tr>
+                        <td>@h.MaHoSo</td>
+                        <td>@h.SinhVien?.HoTen</td>
+                        <td>@h.DeTai?.TenDeTai</td>
+                        <td>@h.NgayNop.ToString("dd/MM/yyyy")</td>
+                        <td class="text-end">
+                            <a asp-action="Create" asp-route-maHoSo="@h.MaHoSo" class="btn btn-sm btn-primary">Nhập kết quả</a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.HoSoChoNhapKetQua.Any())
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-3">Không có hồ sơ nào chờ nhập kết quả.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Kết quả đã ghi nhận -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white fw-semibold">Kết quả đã ghi nhận (@Model.DanhSachKetQua.Count)</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Sinh viên</th>
+                    <th>Đề tài</th>
+                    <th>Điểm</th>
+                    <th>Kết quả</th>
+                    <th>Nhận xét</th>
+                    <th>Ngày cập nhật</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var k in Model.DanhSachKetQua)
+                {
+                    <tr>
+                        <td>@k.HoSo?.SinhVien?.HoTen</td>
+                        <td>@k.HoSo?.DeTai?.TenDeTai</td>
+                        <td>@k.DiemDanhGia</td>
+                        <td>
+                            <span class="badge @(k.KetQua == "Được giao đề tài" ? "bg-success" : "bg-secondary")">@k.KetQua</span>
+                        </td>
+                        <td>@k.NhanXet</td>
+                        <td>@k.NgayCapNhat.ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                }
+                @if (!Model.DanhSachKetQua.Any())
+                {
+                    <tr><td colspan="6" class="text-center text-muted py-3">Chưa có kết quả nào.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor SinhVien/Edit.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model QuanLyDeTaiNghienCuu.Models.ViewModels.SinhVienAdminFormViewModel
+@{ViewData["Title"]="Cập nhật sinh viên";}
+<h1 class="h3">Cập nhật sinh viên</h1><form method="post" asp-action="Edit">
+<partial name="_SinhVienFields" model="Model"/>
+<div class="my-3"><label asp-for="MaTaiKhoan" class="form-label"></label><select asp-for="MaTaiKhoan" asp-items="Model.Accounts" class="form-select"><option value="">Chưa liên kết tài khoản</option></select><span asp-validation-for="MaTaiKhoan" class="text-danger"></span></div>
+<div class="form-check my-3"><input asp-for="TrangThai" class="form-check-input"/><label asp-for="TrangThai" class="form-check-label"></label></div>
+<button class="btn btn-primary">Lưu sinh viên</button> <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a></form>
+@section Scripts { <partial name="_ValidationScriptsPartial"/> }

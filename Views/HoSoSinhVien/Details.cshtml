@@ -1,0 +1,24 @@
+@*
+Nguồn mã: Mã nền nhóm và/hoặc bản tham khảo Module 3 có hỗ trợ AI.
+Chức năng trong file: Giao diện Razor HoSoSinhVien/Details.cshtml.
+Thông tin người trực tiếp thực hiện: Chưa xác nhận; không gán tác giả cá nhân.
+Giữ nguyên thông tin tác giả mã nền khi hợp nhất với repository nhóm.
+Đối chiếu: DOI_CHIEU_DONG_GOP_HAI.md tại thư mục solution.
+*@
+@model HoSoDangKyDeTai
+@using QuanLyDeTaiNghienCuu.Services
+@{ViewData["Title"]=$"Hồ sơ #{Model.MaHoSo}";}
+<h1 class="h3">Hồ sơ đăng ký #@Model.MaHoSo</h1><p class="lead">@Model.DeTai?.TenDeTai</p>
+<dl class="row"><dt class="col-md-3">Bộ môn</dt><dd class="col-md-9">@Model.DeTai?.BoMon?.TenBoMon</dd><dt class="col-md-3">Ngày nộp</dt><dd class="col-md-9">@Model.NgayNop.ToString("dd/MM/yyyy HH:mm")</dd><dt class="col-md-3">Trạng thái</dt><dd class="col-md-9"><strong>@Model.TrangThai</strong></dd></dl>
+<h2 class="h5">Đề cương sơ bộ</h2><p style="white-space:pre-wrap">@Model.DeCuongSoBo</p>
+<h2 class="h5">Ghi chú</h2><p style="white-space:pre-wrap">@(Model.GhiChu ?? "Không có")</p>
+@if(Model.NgayXuLy.HasValue){<h2 class="h5">Nhận xét xét duyệt</h2><p>@Model.NgayXuLy.Value.ToString("dd/MM/yyyy HH:mm")</p><p style="white-space:pre-wrap">@Model.NhanXetXetDuyet</p>}
+<h2 class="h5 mt-4">Lịch bảo vệ đề cương</h2>
+@if(!Model.LichBaoVeDeCuongs.Any()){<p>Chưa có lịch bảo vệ đề cương.</p>}
+else{<div class="table-responsive"><table class="table"><thead><tr><th>Thời gian</th><th>Hình thức</th><th>Địa điểm / liên kết</th><th>Phản biện</th><th>Trạng thái</th></tr></thead><tbody>
+@foreach(var l in Model.LichBaoVeDeCuongs.OrderByDescending(l=>l.ThoiGianBatDau)){<tr><td>@l.ThoiGianBatDau.ToString("dd/MM/yyyy HH:mm") – @l.ThoiGianKetThuc.ToString("HH:mm")</td><td>@l.HinhThucBaoVe</td><td>@l.DiaDiemHoacLienKet</td><td>@l.GiangVienPhanBien</td><td>@l.TrangThai</td></tr>}</tbody></table></div>}
+<h2 class="h5 mt-4">Kết quả giao đề tài</h2>
+@if(Module3Rules.ResultPublished(Model)){<p><strong>@Model.KetQuaGiaoDeTai!.KetQua</strong> · Điểm: @(Model.KetQuaGiaoDeTai.DiemDanhGia?.ToString("0.##") ?? "Không sử dụng")</p><p style="white-space:pre-wrap">@Model.KetQuaGiaoDeTai.NhanXet</p><p>Cập nhật: @Model.KetQuaGiaoDeTai.NgayCapNhat.ToString("dd/MM/yyyy HH:mm")</p>}
+else{<p>Kết quả chưa được công bố.</p>}
+@if(Module3Rules.CanCancel(Model)){<form method="post" asp-action="Cancel" asp-route-id="@Model.MaHoSo" class="mt-4 border rounded p-3"><input type="hidden" name="version" value="@Model.Version"/><p>Hủy đăng ký sẽ chuyển hồ sơ sang Đã hủy và giữ lịch sử.</p><button class="btn btn-outline-danger" onclick="return confirm('Bạn xác nhận hủy hồ sơ đăng ký này?')">Hủy hồ sơ đăng ký</button></form>}
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">Danh sách hồ sơ của tôi</a>

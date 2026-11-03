@@ -1,3 +1,16 @@
 .vs/
+quan
 bin/
 obj/
+=======
+hai
+bin/
+obj/
+*.user
+=======
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+main
+main
