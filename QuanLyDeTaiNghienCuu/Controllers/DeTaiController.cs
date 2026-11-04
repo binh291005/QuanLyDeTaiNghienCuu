@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyDeTaiNghienCuu.Data;
+using QuanLyDeTaiNghienCuu.Filters;
+using QuanLyDeTaiNghienCuu.Helpers;
 using QuanLyDeTaiNghienCuu.Models;
 using QuanLyDeTaiNghienCuu.Models.ViewModels;
 using System;
@@ -196,6 +198,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         }
 
         // GET: DeTai/Create
+        [AuthorizeRole(Roles.Admin, Roles.GiangVien)]
         public async Task<IActionResult> Create()
         {
             var boMons = await _context.BoMons.Where(b => b.TrangThai).OrderBy(b => b.TenBoMon).ToListAsync();
@@ -217,6 +220,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         // POST: DeTai/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeRole(Roles.Admin, Roles.GiangVien)]
         public async Task<IActionResult> Create(DeTaiFormViewModel model)
         {
             // Business logic check: HanDangKy >= NgayBatDauDangKy
@@ -264,6 +268,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         }
 
         // GET: DeTai/Edit/5
+        [AuthorizeRole(Roles.Admin, Roles.GiangVien)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -302,6 +307,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         // POST: DeTai/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeRole(Roles.Admin, Roles.GiangVien)]
         public async Task<IActionResult> Edit(int id, DeTaiFormViewModel model)
         {
             if (id != model.MaDeTai)
@@ -400,6 +406,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         }
 
         // GET: DeTai/Delete/5
+        [AuthorizeRole(Roles.Admin, Roles.GiangVien)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -424,6 +431,7 @@ namespace QuanLyDeTaiNghienCuu.Controllers
         // POST: DeTai/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AuthorizeRole(Roles.Admin, Roles.GiangVien)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deTai = await _context.DeTais

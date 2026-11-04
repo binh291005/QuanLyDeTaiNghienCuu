@@ -29,35 +29,53 @@
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item">
-quan
                             <a class="nav-link nav-link-custom" asp-controller="DeTai" asp-action="Index">
-                                <i class="fa-solid fa-book-bookmark me-1"></i> Module 2: Quản Lý Đề Tài
+                                <i class="fa-solid fa-book-bookmark me-1"></i> Đề tài
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom" asp-controller="HoSoDangKyDeTai" asp-action="Index">
-                                <i class="fa-solid fa-folder-open me-1"></i> Module 4: Hồ Sơ Đăng Ký
-                            </a>
-                        </li>
-
-                            <a class="nav-link nav-link-custom active" asp-controller="DeTai" asp-action="Index">
-                                <i class="fa-solid fa-book-bookmark me-1"></i> Module 2: Quản Lý Đề Tài
-                            </a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="LichBaoVeDeCuong" asp-action="Index"><i class="fa-solid fa-calendar-check me-1"></i> Lịch bảo vệ</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="KetQuaGiaoDeTai" asp-action="Index"><i class="fa-solid fa-award me-1"></i> Kết quả</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="ThongKe" asp-action="Dashboard"><i class="fa-solid fa-chart-pie me-1"></i> Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom" asp-controller="ThongKe" asp-action="Index"><i class="fa-solid fa-chart-column me-1"></i> Thống kê</a></li>
-main
+                        @if (Context.Session.IsAdmin())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom" asp-controller="TaiKhoan" asp-action="Index">
+                                    <i class="fa-solid fa-users-gear me-1"></i> Tài khoản
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom" asp-controller="BoMon" asp-action="Index">
+                                    <i class="fa-solid fa-building-columns me-1"></i> Bộ môn
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
-                            <i class="fa-solid fa-user-shield me-1"></i> Giảng viên / Admin
-                        </span>
-                        <a asp-controller="DeTai" asp-action="Create" class="btn btn-primary-custom">
-                            <i class="fa-solid fa-plus me-1"></i> Tạo Đề Tài Mới
-                        </a>
+                        @if (Context.Session.IsLoggedIn())
+                        {
+                            if (Context.Session.IsAdmin() || Context.Session.IsGiangVien())
+                            {
+                                <a asp-controller="DeTai" asp-action="Create" class="btn btn-primary-custom">
+                                    <i class="fa-solid fa-plus me-1"></i> Tạo Đề Tài Mới
+                                </a>
+                            }
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                <i class="fa-solid fa-user-shield me-1"></i>
+                                @Context.Session.GetHoTen() &middot; @Roles.ToDisplay(Context.Session.GetVaiTro())
+                            </span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-custom">
+                                    <i class="fa-solid fa-right-from-bracket me-1"></i> Đăng xuất
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-custom">
+                                <i class="fa-solid fa-user-plus me-1"></i> Đăng ký
+                            </a>
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary-custom">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập
+                            </a>
+                        }
                     </div>
                 </div>
             </div>

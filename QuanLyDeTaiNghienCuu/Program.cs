@@ -18,7 +18,8 @@ namespace QuanLyDeTaiNghienCuu
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-quan
+
+            // Session phục vụ đăng nhập / phân quyền (Module 1)
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
@@ -26,7 +27,6 @@ quan
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-main
 
             var app = builder.Build();
 
@@ -56,10 +56,7 @@ main
             app.UseHttpsRedirection();
             app.UseRouting();
 
-quan
-            app.UseSession();
-
-main
+            app.UseSession(); // phải đặt trước các Controller cần đọc Session
             app.UseAuthorization();
 
             app.MapStaticAssets();
